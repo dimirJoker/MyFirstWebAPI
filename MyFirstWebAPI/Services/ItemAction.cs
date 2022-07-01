@@ -49,22 +49,26 @@ namespace MyFirstWebAPI.Services
             return itemsTable;
         }
 
-        public void Insert(Item item)
+        public bool Insert(Item item)
         {
             using (_connection)
             {
-                MySqlCommand command = new("insert into itemstable (Name, Salary) values (@name, @salary)", _connection);
+                MySqlCommand command = new("insert into itemstable (Name, Salary, Image) values (@name, @salary, @image)", _connection);
                 command.Parameters.AddWithValue("@name", item.Name);
                 command.Parameters.AddWithValue("@salary", item.Salary);
+                command.Parameters.AddWithValue("@image", item.Image);
 
                 try
                 {
                     _connection.Open();
 
                     MySqlDataReader reader = command.ExecuteReader();
+
+                    return true;
                 }
                 catch (Exception ex)
                 {
+                    return false;
                 }
             }
         }
@@ -102,28 +106,32 @@ namespace MyFirstWebAPI.Services
             return item;
         }
 
-        public void Update(Item item)
+        public bool Update(Item item)
         {
             using (_connection)
             {
-                MySqlCommand command = new("update itemstable set Name=@name, Salary=@salary where Id=@id", _connection);
+                MySqlCommand command = new("update itemstable set Name=@name, Salary=@salary, Image=@image where Id=@id", _connection);
                 command.Parameters.AddWithValue("@name", item.Name);
                 command.Parameters.AddWithValue("@salary", item.Salary);
                 command.Parameters.AddWithValue("@id", item.Id);
+                command.Parameters.AddWithValue("@image", item.Image);
 
                 try
                 {
                     _connection.Open();
 
                     MySqlDataReader reader = command.ExecuteReader();
+
+                    return true;
                 }
                 catch (Exception ex)
                 {
+                    return false;
                 }
             }
         }
 
-        public void Delete(uint id)
+        public bool Delete(uint id)
         {
             using (_connection)
             {
@@ -135,9 +143,12 @@ namespace MyFirstWebAPI.Services
                     _connection.Open();
 
                     MySqlDataReader reader = command.ExecuteReader();
+
+                    return true;
                 }
                 catch (Exception ex)
                 {
+                    return false;
                 }
             }
         }
